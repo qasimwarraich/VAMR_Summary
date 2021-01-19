@@ -567,21 +567,33 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
       p1,p2 and the baseline (translation vector) must all be co-planar.
 
 3. Are you able to define the essential matrix?
+    - The essential matrix describes the relation between stereo cameras using
+      point correspondence. It shows the relationship between corresponding
+      points in two **Calibrated** stereo cameras. It is equal to the product
+      skew of $T$ multiplied by $R$.
+    - It is useful to decompose in order to get the rotation and translation.
+    - It yields four possible solutions, two of the views are flipped 180
+      degrees around the optical axis. There is only really one viable solution
+      as only one solution has the points projecting in front of the cameras.
+
 4. Are you able to derive the 8-point algorithm?
     - The 8 point algorithm assumes that all entries of the essential matrix
       are independent to each other. This means it's not as optimal but it is
-      similar to the assumption made in DLT. The 5 point DOES NOT make this
+      similar to the assumption made in DLT. The 5 point **DOES NOT** make this
       assumption. To compensate we can use reprojection error minimisation. The
       minimum number of points required is 8 so the matrix is rank 8 to get a
       non trivial solution. If you have more than 8 points we have to use least
       squares approximation. This minimises the sum of square residuals.
-    - The degenerate configuration is when all 8 3D points are coplanar.
     - The five point algorithm also works for planar configurations.
     - the 8 point algorithm applies to both calibrated and uncalibrated cameras
       whereas the 5 point can only be applied to calibrated cameras.
+    - the $Q$ matrix should have rank 8 so as to have a unique and non trivial
+      solution.
+    - The degenerate configuration is when all 8 3D points are coplanar.
+
 5. How many rotation-translation combinations can the essential matrix be
    decomposed into?
-    - The essential matrix is what time were you looking to meet?
+
 6. Are you able to provide a geometrical interpretation of the epipolar
    constraint?
 7. Are you able to describe the relation between the essential and the
