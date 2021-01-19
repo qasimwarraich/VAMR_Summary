@@ -665,7 +665,7 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
         - We compute for example the Epipolar line distance for all the other
           points and discard all the points that are below a certain threshold.
         - We reiterate all of the above for k times. After k times we select
-          the set with the largest number of inliners.
+          the set with the largest number of inliers.
             - If we assume 50% outliers and 99% success probability it requires
               1177 iterations.
             - 5-point RANSAC would gave 145 iterations
@@ -673,6 +673,12 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
 
 17. How  can  we  reduce  the  number  of  RANSAC  iterations  for  the  SFM
     problem? (1-and  2-point RANSAC)
+        - We can apply some motion constraints. For example if we have a floor
+          bound robot we have a planar motion and do not thus require 6 DoF, 3
+          is sufficient. This allows us to built different $[R|T]$ matrices.
+        - In the case of a train moving on a rail (line motion) we don't need
+          any points as we already have the geometry.
+        - Circular planar motion requires one point.
 
 18. Bundle Adjustment and Pose Graph Optimization. Mathematical expressions and
     illustrations. Pros and cons.
