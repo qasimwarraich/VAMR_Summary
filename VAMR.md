@@ -436,8 +436,8 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
 11. How is the keypoint detection done in SIFT and how does this differ from Harris?
     - Harris uses the SSD metric which is thresholded where as SIFT uses a DoG
       approach and looks for local extrema in both scale and space. It compares
-      each pixel to 26 neighbourghing pixels one scale level above and below
-      (kernel size 3x3) 
+      each pixel to 26 neighbouring pixels one scale level above and below
+      (kernel size 3x3)
 
 12. How does SIFT achieve orientation invariance?
     - Multiply the patch with a Gaussian filter and compute the dominant
@@ -529,6 +529,7 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
 
 9. Are you able to provide a definition of epipole, epipolar line and epipolar
    plane?
+   - The norm of the plane is the epipolar line in c2
 
 10. Are you able to draw the epipolar lines for two converging cameras, for a
     forward motion situation, and for a side-moving camera?
@@ -572,9 +573,6 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
       points in two **Calibrated** stereo cameras. It is equal to the product
       skew of $T$ multiplied by $R$.
     - It is useful to decompose in order to get the rotation and translation.
-    - It yields four possible solutions, two of the views are flipped 180
-      degrees around the optical axis. There is only really one viable solution
-      as only one solution has the points projecting in front of the cameras.
 
 4. Are you able to derive the 8-point algorithm?
     - The 8 point algorithm assumes that all entries of the essential matrix
@@ -587,20 +585,36 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
     - The five point algorithm also works for planar configurations.
     - the 8 point algorithm applies to both calibrated and uncalibrated cameras
       whereas the 5 point can only be applied to calibrated cameras.
-    - the $Q$ matrix should have rank 8 so as to have a unique and non trivial
+    - The $Q$ matrix should have rank 8 so as to have a unique and non trivial
       solution.
     - The degenerate configuration is when all 8 3D points are coplanar.
+    - The error for 8 points will be zero but it is important to note that
+      below 8 points we will not notice the effects of noise which are ever
+      present.
 
 5. How many rotation-translation combinations can the essential matrix be
    decomposed into?
+    - It yields four possible solutions, two of the views are flipped 180
+      degrees around the optical axis. There is only really one viable solution
+      as only one solution has the points projecting in front of the cameras.
 
 6. Are you able to provide a geometrical interpretation of the epipolar
    constraint?
+
 7. Are you able to describe the relation between the essential and the
    fundamental matrix?
+
 8. Why is it important to normalize the point coordinates in the 8-point algorithm?
+    - The range of values in the essential matrix are massive.
+
 9. Describe one or more possible ways to achieve this normalization.
+    - Hartley proposed to rescale the image coordinates so that they fit in a
+      range of [-1,1]. This can be achieved by dividing by the W x H of the
+      image over the range and then shifting the pixel coordinates.
+    - Normalisation is also possible by projecting onto a unit sphere.
+
 10. Are you able to describe the normalized 8-point algorithm?
+
 11. Are you able to provide quality metrics for the essential matrix estimation?
 12. Why do we need RANSAC?
 13. What is the theoretical maximum number of combinations to explore?
@@ -659,7 +673,7 @@ blocks.**
 
 5. **How  would  you  design  a  mobile  tourist  app?  The  user  points  the
 phone  in  the  direction  of  a landmark and the app displays tag with the
-name of it. How would you implement it?**e
+name of it. How would you implement it?**
 
 6. **Assume  that  we  have  several  images  downloaded  from  flicker
 showing  the  two  towers  of Grossmünster.  Since  such  images  were
