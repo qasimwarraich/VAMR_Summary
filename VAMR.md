@@ -27,11 +27,11 @@ a sequence of orientation and position (Array of 6 DoF poses)
 
 ### SFM vs VO vs VSLAM
 
-<center> <img src="./img/vovsvslamvssfm.png" alt="SFM"
+<center> <img src="/home/spam/Documents/VAMR_Summary/vovsvslamvssfm.png" alt="SFM"
 width="250"> </center>
 
 <!-- ![Venn Diagram of Motion
-Estimation](./img/vovsvslamvssfm.png){width=80%} -->
+Estimation](/home/spam/Documents/VAMR_Summary/vovsvslamvssfm.png){width=80%} -->
 
 - SFM is more general and makes no assumption on the order that the images were
   taken. For example the "Building Rome in a Day" project.
@@ -49,9 +49,9 @@ Estimation](./img/vovsvslamvssfm.png){width=80%} -->
 
 ### VO Building Blocks
 
-<center> <img src="./img/voflow.png" alt="VO Flow" width="500">
+<center> <img src="/home/spam/Documents/VAMR_Summary/voflow.png" alt="VO Flow" width="500">
 </center>
-<!-- ![VO Flow Chart](./img/voflow.png){ width=80%
+<!-- ![VO Flow Chart](/home/spam/Documents/VAMR_Summary/voflow.png){ width=80%
 } -->
 
 - Feature detection and matching are the input to the motion estimation algorithm.
@@ -71,7 +71,7 @@ Estimation](./img/vovsvslamvssfm.png){width=80%} -->
       cause diffraction effects which also cause blur. Smaller aperture also
       means less light so less a dimmer image. Exposure should be used to
       compensate. Different points on the same object might not be in focus just
-      because one of them is.<center><img src="./img/blurcircle.png"
+      because one of them is.<center><img src="/home/spam/Documents/VAMR_Summary/blurcircle.png"
       alt="blurcircle" width="550"></center>
 
     - In general we aim to restrict the blur circle to one pixel. This can be
@@ -80,7 +80,7 @@ Estimation](./img/vovsvslamvssfm.png){width=80%} -->
       alternatively shrinking the iris of the camera.
 
 2. Derive the thin lens equation and perform the pinhole approximation
-      <center><img src="./img/thinlens.png"
+      <center><img src="/home/spam/Documents/VAMR_Summary/thinlens.png"
       alt="Thin Lens"
       width="500"></center>
 
@@ -98,7 +98,7 @@ Estimation](./img/vovsvslamvssfm.png){width=80%} -->
       that we have $\frac{1}{f}\approx\frac{1}{e}$ so we can
       derive that $f \approx e$.
     - This approximation is the basis of the Pin-hole approximation, which can
-      be described as: <center><img src="./img/pinholeapprx.png"
+      be described as: <center><img src="/home/spam/Documents/VAMR_Summary/pinholeapprx.png"
       alt="pinhole approximation"></center>
     - The equation is negative as the image is flipped upside down. The lens
       ceases to exist and becomes an ideal pin hole. We use only one ray and
@@ -245,7 +245,7 @@ Estimation](./img/vovsvslamvssfm.png){width=80%} -->
 
 1. Explain the differences between convolution and correlation
     - Convolution computes a sum of products by sliding two signals over each
-      other. Important to not one of the filter is flipped. This allows for
+      other. Important to note one of the filter is flipped. This allows for
       associativity and commutativity.
     - Correlation is the same as convolution but doesn't flip the filter. This
       means it doesn't enjoy the benefits of commutativity and associativity.
@@ -351,9 +351,9 @@ Estimation](./img/vovsvslamvssfm.png){width=80%} -->
      template are very similar including the background.
 3. Illustrate the similarity metrics SSD,SAD, NCC, and Census transform
    - $\cos \theta = \frac{<H,F>}{\|H\|\|F\|}$
-   - ![Similarity Measures](./img/similaritymeasures.png)
+   - ![Similarity Measures](./similaritymeasures.png)
    - Zero mean versions help make them more robust to illumination changes.
-   - ![Census Transform](./img/censustransform.png)
+   - ![Census Transform](./censustransform.png)
 
 4. What is the intuitive explanation behind SSD and NCC
 5. Explain what are good features to track. In particular, can you explain what
@@ -363,6 +363,10 @@ Estimation](./img/vovsvslamvssfm.png){width=80%} -->
 6. Explain the Harris corner detector. In particular:
 
     1. Use the Moravec definition of corner, edge and flat region.
+        - Moravec uses SSD and a sliding kernel to compute differences and
+          search for intensity changes in relation to direction. No change
+          indicates a flat region a change in one direction indicates an edge
+          and a change in two directions indicates a corner. 
 
     2. Show  how  to  get  the  second  moment  matrix  from  the  definition
     of  SSD  and  first  order approximation  (show  that  this  is  a
@@ -371,9 +375,12 @@ Estimation](./img/vovsvslamvssfm.png){width=80%} -->
 
     3. What is the M matrix like for an edge, for a flat region, for an
     axis-aligned 90-degree corner and for a non-axis—aligned 90-degree corner?
+        - For a flat region it should be all zeros. In the diagonal it should
+          be 1,0 or 0,1 for a corner we would have ones in the diagonals.
 
     4. What do the eigenvalues of M reveal?
         - The existence of corners.
+
     5. Can you compare Harris detection with Shi-Tomasi detection?
 
     6. Can you explain whether the Harris detector is invariant to illumination
@@ -382,7 +389,7 @@ Estimation](./img/vovsvslamvssfm.png){width=80%} -->
           it is also invariant to view point changes as the eigenvalues are not
           effected by rotation. It is not however scale invariant.
         - Affine illumination: Derivatives are invariant by definition to
-          constant. Also when scaled linearly will also rescale the eigen
+          constant illumination changes. Also when scaled linearly will also rescale the eigen
           values.
         - It is also invariant to monotonic illumination changes as they are
           Harris relies of local maxima.
@@ -426,12 +433,19 @@ Estimation](./img/vovsvslamvssfm.png){width=80%} -->
       Different to intensity and census descriptors this HOG descriptor
       contains float values. HOG is a 1D vector.
 
-11. How is t he keypoint detection done in SIFT and how does this differ from Harris?
+11. How is the keypoint detection done in SIFT and how does this differ from Harris?
+    - Harris uses the SSD metric which is thresholded where as SIFT uses a DoG
+      approach and looks for local extrema in both scale and space. It compares
+      each pixel to 26 neighbourghing pixels one scale level above and below
+      (kernel size 3x3) 
 
 12. How does SIFT achieve orientation invariance?
+    - Multiply the patch with a Gaussian filter and compute the dominant
+      orientation by computing the HOG. This allows us to derotate the patch
+      into a canonical orientation.
 
 13. How is the SIFT descriptor built?
-    - ![SIFT descriptor](./img/siftdescriptor.png)
+    - ![SIFT descriptor](./siftdescriptor.png)
     - To make it invariant to linear illumination changes we must divide the
       descriptor by it's norm. This is basically the energy of the signal and
       makes the descriptor have an effective norm of 1. This makes it invariant
@@ -448,6 +462,8 @@ Estimation](./img/vovsvslamvssfm.png){width=80%} -->
 
 14. What is the repeatability of the SIFT detector after a rescaling of 2? And
     for a 50 degrees’ viewpoint change?
+    - SIFT should be scale invariant. At a 50 degree view point change
+      repeatability also drops to 50%
 
 15. Illustrate the 1st to 2nd closest ratio of SIFT detection: what’s the
     intuitive reasoning behind it? Where does the 0.8 factor come from?
@@ -464,7 +480,7 @@ Estimation](./img/vovsvslamvssfm.png){width=80%} -->
 16. How does the FAST detector work? What are its pros and cons compared with
     Harris?
     - Features from Accelerated Segment Test, It is suboptimal compared to Harris.
-    - ![FAST detector](./img/fast.png)
+    - ![FAST detector](./fast.png)
     - It checks a ring of 16 pixels and checks N contiguous pixels and checks
       if they are all brighter or darker certain threshold compared to the
       middle pixel. N is typically set at 12.
@@ -474,6 +490,10 @@ Estimation](./img/vovsvslamvssfm.png){width=80%} -->
 ## Lecture 7 : Stereo Vision
 
 1. Can you relate Structure from Motion to 3D reconstruction? What’s their difference?
+    - In 3d reconstruction it is assumed that K,T, R are all know. The goal is
+      to recover 3D  structure from images. in SFM we have no camera
+      assumptions we are interested in recovering both the scene structure and
+      the camera poses from multiple images.
 
 2. Can you define disparity in both the simplified and the general case?
     - Disparity is the horizontal distance between two corresponding points.
@@ -481,7 +501,7 @@ Estimation](./img/vovsvslamvssfm.png){width=80%} -->
 
 3. Can you provide a mathematical expression of depth as a function of  the
    baseline, the disparity and the focal length?
-    - ![StereoVision](./img/disparity.png)
+    - ![StereoVision](./disparity.png)
     - The width of the image is the max disparity for a stereo cameras. The
       disparity for a point at infinity is zero.
     - The dept depends on the disparity so there is a maximum distance we can
@@ -504,7 +524,7 @@ Estimation](./img/vovsvslamvssfm.png){width=80%} -->
 
 8. What is the geometric interpretation of the linear and non-linear approaches
    and what error do they minimize?
-    - The want to minimise the sum of squared differences of the retrojection
+    - The want to minimise the sum of squared differences of the reprojection
       error.
 
 9. Are you able to provide a definition of epipole, epipolar line and epipolar
@@ -561,13 +581,12 @@ Estimation](./img/vovsvslamvssfm.png){width=80%} -->
       whereas the 5 point can only be applied to calibrated cameras.
 5. How many rotation-translation combinations can the essential matrix be
    decomposed into?
-    - The essential matrix
+    - The essential matrix is what time were you looking to meet?
 6. Are you able to provide a geometrical interpretation of the epipolar
    constraint?
 7. Are you able to describe the relation between the essential and the
    fundamental matrix?
 8. Why is it important to normalize the point coordinates in the 8-point algorithm?
-    - This is due to the fact that 
 9. Describe one or more possible ways to achieve this normalization.
 10. Are you able to describe the normalized 8-point algorithm?
 11. Are you able to provide quality metrics for the essential matrix estimation?
