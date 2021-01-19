@@ -27,11 +27,11 @@ a sequence of orientation and position (Array of 6 DoF poses)
 
 ### SFM vs VO vs VSLAM
 
-<center> <img src="/home/spam/Documents/VAMR_Summary/vovsvslamvssfm.png" alt="SFM"
+<center> <img src="./img/vovsvslamvssfm.png" alt="SFM"
 width="250"> </center>
 
 <!-- ![Venn Diagram of Motion
-Estimation](/home/spam/Documents/VAMR_Summary/vovsvslamvssfm.png){width=80%} -->
+Estimation](./img//vovsvslamvssfm.png){width=80%} -->
 
 - SFM is more general and makes no assumption on the order that the images were
   taken. For example the "Building Rome in a Day" project.
@@ -49,9 +49,9 @@ Estimation](/home/spam/Documents/VAMR_Summary/vovsvslamvssfm.png){width=80%} -->
 
 ### VO Building Blocks
 
-<center> <img src="/home/spam/Documents/VAMR_Summary/voflow.png" alt="VO Flow" width="500">
+<center> <img src="./img/voflow.png" alt="VO Flow" width="500">
 </center>
-<!-- ![VO Flow Chart](/home/spam/Documents/VAMR_Summary/voflow.png){ width=80%
+<!-- ![VO Flow Chart](./img//voflow.png){ width=80%
 } -->
 
 - Feature detection and matching are the input to the motion estimation algorithm.
@@ -71,7 +71,7 @@ Estimation](/home/spam/Documents/VAMR_Summary/vovsvslamvssfm.png){width=80%} -->
       cause diffraction effects which also cause blur. Smaller aperture also
       means less light so less a dimmer image. Exposure should be used to
       compensate. Different points on the same object might not be in focus just
-      because one of them is.<center><img src="/home/spam/Documents/VAMR_Summary/blurcircle.png"
+      because one of them is.<center><img src="./img//blurcircle.png"
       alt="blurcircle" width="550"></center>
 
     - In general we aim to restrict the blur circle to one pixel. This can be
@@ -80,7 +80,7 @@ Estimation](/home/spam/Documents/VAMR_Summary/vovsvslamvssfm.png){width=80%} -->
       alternatively shrinking the iris of the camera.
 
 2. Derive the thin lens equation and perform the pinhole approximation
-      <center><img src="/home/spam/Documents/VAMR_Summary/thinlens.png"
+      <center><img src="./img//thinlens.png"
       alt="Thin Lens"
       width="500"></center>
 
@@ -98,7 +98,7 @@ Estimation](/home/spam/Documents/VAMR_Summary/vovsvslamvssfm.png){width=80%} -->
       that we have $\frac{1}{f}\approx\frac{1}{e}$ so we can
       derive that $f \approx e$.
     - This approximation is the basis of the Pin-hole approximation, which can
-      be described as: <center><img src="/home/spam/Documents/VAMR_Summary/pinholeapprx.png"
+      be described as: <center><img src="./img//pinholeapprx.png"
       alt="pinhole approximation"></center>
     - The equation is negative as the image is flipped upside down. The lens
       ceases to exist and becomes an ideal pin hole. We use only one ray and
@@ -351,9 +351,9 @@ Estimation](/home/spam/Documents/VAMR_Summary/vovsvslamvssfm.png){width=80%} -->
      template are very similar including the background.
 3. Illustrate the similarity metrics SSD,SAD, NCC, and Census transform
    - $\cos \theta = \frac{<H,F>}{\|H\|\|F\|}$
-   - ![Similarity Measures](./similaritymeasures.png)
+   - ![Similarity Measures](./img/similaritymeasures.png)
    - Zero mean versions help make them more robust to illumination changes.
-   - ![Census Transform](./censustransform.png)
+   - ![Census Transform](./img/censustransform.png)
 
 4. What is the intuitive explanation behind SSD and NCC
 5. Explain what are good features to track. In particular, can you explain what
@@ -389,8 +389,8 @@ Estimation](/home/spam/Documents/VAMR_Summary/vovsvslamvssfm.png){width=80%} -->
           it is also invariant to view point changes as the eigenvalues are not
           effected by rotation. It is not however scale invariant.
         - Affine illumination: Derivatives are invariant by definition to
-          constant illumination changes. Also when scaled linearly will also rescale the eigen
-          values.
+          constant illumination changes. Also when scaled linearly will also
+          rescale the eigen values.
         - It is also invariant to monotonic illumination changes as they are
           Harris relies of local maxima.
         - Viewpoint invariance: It depends on the degree of the viewpoint
@@ -445,7 +445,7 @@ Estimation](/home/spam/Documents/VAMR_Summary/vovsvslamvssfm.png){width=80%} -->
       into a canonical orientation.
 
 13. How is the SIFT descriptor built?
-    - ![SIFT descriptor](./siftdescriptor.png)
+    - ![SIFT descriptor](./img/siftdescriptor.png)
     - To make it invariant to linear illumination changes we must divide the
       descriptor by it's norm. This is basically the energy of the signal and
       makes the descriptor have an effective norm of 1. This makes it invariant
@@ -463,7 +463,7 @@ Estimation](/home/spam/Documents/VAMR_Summary/vovsvslamvssfm.png){width=80%} -->
 14. What is the repeatability of the SIFT detector after a rescaling of 2? And
     for a 50 degrees’ viewpoint change?
     - SIFT should be scale invariant. At a 50 degree view point change
-      repeatability also drops to 50%
+      repeatability also drops to 50%.
 
 15. Illustrate the 1st to 2nd closest ratio of SIFT detection: what’s the
     intuitive reasoning behind it? Where does the 0.8 factor come from?
@@ -480,7 +480,7 @@ Estimation](/home/spam/Documents/VAMR_Summary/vovsvslamvssfm.png){width=80%} -->
 16. How does the FAST detector work? What are its pros and cons compared with
     Harris?
     - Features from Accelerated Segment Test, It is suboptimal compared to Harris.
-    - ![FAST detector](./fast.png)
+    - ![FAST detector](./img/fast.png)
     - It checks a ring of 16 pixels and checks N contiguous pixels and checks
       if they are all brighter or darker certain threshold compared to the
       middle pixel. N is typically set at 12.
@@ -501,10 +501,10 @@ Estimation](/home/spam/Documents/VAMR_Summary/vovsvslamvssfm.png){width=80%} -->
 
 3. Can you provide a mathematical expression of depth as a function of  the
    baseline, the disparity and the focal length?
-    - ![StereoVision](./disparity.png)
+    - ![StereoVision](./img/disparity.png)
     - The width of the image is the max disparity for a stereo cameras. The
       disparity for a point at infinity is zero.
-    - The dept depends on the disparity so there is a maximum distance we can
+    - The depth depends on the disparity so there is a maximum distance we can
       reliably compute.
 
 4. Can you apply error propagation to derive an expression for depth
