@@ -366,7 +366,7 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
         - Moravec uses SSD and a sliding kernel to compute differences and
           search for intensity changes in relation to direction. No change
           indicates a flat region a change in one direction indicates an edge
-          and a change in two directions indicates a corner. 
+          and a change in two directions indicates a corner.
 
     2. Show  how  to  get  the  second  moment  matrix  from  the  definition
     of  SSD  and  first  order approximation  (show  that  this  is  a
@@ -616,17 +616,67 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
 10. Are you able to describe the normalized 8-point algorithm?
 
 11. Are you able to provide quality metrics for the essential matrix estimation?
+
 12. Why do we need RANSAC?
+
 13. What is the theoretical maximum number of combinations to explore?
+
 14. After how many iterations can RANSAC be stopped to guarantee a given
     success probability?
+    - We can try to probabilistically determine the number of inliers in the
+      image. A safe estimate if unable to use a guess is to use 50% of the
+      data.
+    - $w$ can specify the number of inliers, $w^2$ is the probability that two
+      points are inliers. It follows that $1-w^2$ represents the probability
+      that one of these points is an outlier. We can further argue that if we
+      did $k$ iterations then we can say that the probability of not being able
+      to select two inliers after $k$ iterations is $(1-w^2)^k$. This would
+      mean that if we supply a success probability $p$ as mentioned above the
+      over all probability of failure would be  $1-p$ and based on our
+      definition above this would mean that this is also equal to $(1-w^2)^k$.
+      If we solve for $k$ by inverting the function we get: $\large k =
+      \frac{\log(1-p)}{\log(1-w^2)}$
+
 15. What is the trend of RANSAC vs. iterations, vs. the fraction of outliers,
     vs. the number of points to estimate the model?
+
 16. How do we apply RANSAC to the 8-point algorithm, DLT, P3P?
+    - Example: SFM
+        - We need to know what the model is in SFM?
+            - The model is the fundamental or the essential matrix.
+            - Decomposition of the matrix also means R and T are a model.
+            - These two basically mean the same thing.
+        - What are the minimum number of points?
+            - 5 points is the theoretical minimum, it also depends on the type
+              of solver to estimate the essential matrix. If we use the same
+              solver from the 8 point algorithm we use 8 points.
+        - How do we compute the distance of a point from the model in other
+          words how do we define a distance metric that measures how well a
+          point fits the model.
+            - Algebraic error
+            - Directional error
+            - Epipolar line distance
+            - Reprojection error
+    - 8-point RANSAC:
+        - Select at random 8 point correspondences
+        - Apply the fundamental matrix estimation and we compute the matrix.
+        - The error any of the four above will be zero for those 8 points but
+          non zero for others.
+        - We compute for example the Epipolar line distance for all the other
+          points and discard all the points that are below a certain threshold.
+        - We reiterate all of the above for k times. After k times we select
+          the set with the largest number of inliners.
+            - If we assume 50% outliers and 99% success probability it requires
+              1177 iterations.
+            - 5-point RANSAC would gave 145 iterations
+            - 2-point RANSAC line fitting would require 16 iterations.
+
 17. How  can  we  reduce  the  number  of  RANSAC  iterations  for  the  SFM
     problem? (1-and  2-point RANSAC)
+
 18. Bundle Adjustment and Pose Graph Optimization. Mathematical expressions and
     illustrations. Pros and cons.
+
 19. Are you able to describe hierarchical and sequential SFM for monocular
     VO?
 20. What are keyframes? Why do we need them and how can we select them?
