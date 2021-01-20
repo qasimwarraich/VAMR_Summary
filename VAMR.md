@@ -885,9 +885,24 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
 
 1. Are you able to describe the multi-view stereo working principle?
    (aggregated photometric error)
+   - We try to make correspondences by choosing our first image as the
+     reference and then trying to find the corresponding point by looking along
+     the epipolar line of the first image (as all the intrinsics and extrinsics
+     are known) and trying to minimise the photometric error for different
+     candidate depths. In the end we sum all these plots of the photometric
+     errors and we are able to do this as the d value is consistent as all the
+     plots compare from the same reference image. This sum is called the
+     aggregated photometric cost. It's the pixel wise SSD of each image
+     compared to the reference image. This will yield a three dimensional
+     array. Typically it is represented in a Disparity Space Image.
 
 2. What  are  the  differences  in  the  behaviour  of  the  aggregated
    photometric  error  for  corners,  flat regions, and edges?
+   - For a flat region there is no distinct peak.
+   - For a flat corner we get a distinctive negative peak.
+   - For an edge it there is a distinct flat valley.
+   - If the edge is perpendicular to the direction of motion then it could be
+     possible to get a distinct peak.
 
 3. What is the disparity space image (DSI) and how is it built in practice?
 
@@ -895,13 +910,31 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
 
 5. How do we enforce smoothness (regularization) and how do we incorporate
    depth discontinuities (mathematical expressions)?
+   - We use a lambda value and a regularisation term that suppresses jumps or
+     discontinuities that are revealed by the derivatives of $d(u,v)$.
 
 6. What happens if we increase lambda (the regularization term)? What if lambda
    is 0? And if lambda is too big?
+   - Increasing Lambda puts a veil a long a noisy point cloud. But the problem
+     is we are smoothing over discontinuities and filling in holes so to say.
+   - Lambda has to be estimated. We make lambda according to image gradients.
+     If we have a strong gradient we don't won’t to smooth but if we have a
+     weak gradient we probably want to smooth. Strong gradients aka edges are
+     not always indicators of depth discontinuities but are a good estimation
+     nonetheless. A simple example of this failing would be a picture of a
+     picture. The algorithm would assume the edges of the nested picture are a
+     depth discontinuity but this is not the case. This is where semantic and
+     learning models can improve results.
 
 7. What is the optimal baseline for multi-view stereo?
+    - Smaller 10% of the ration between the motion and the depth. Basically the
+      motion is very small. With a smaller baseline the patch will appear
+      similar in different views where as with a large baseline it may be
+      easier to triangulate but the appearance will be different.
 
 8. What are the advantages of GPUs?
+    - GPU allows the calculation in parallel of thousands of calculations. This
+      is done through the utilisation of thousands of small cores.
 
 ## Lecture 12b : Place Recognition
 
