@@ -817,6 +817,7 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
       matrix, the eigen values and another rotation matrix.
 
 4. What is the aperture problem and how can we overcome it?
+    - When we can no longer tell where the template has moved.
 
 5. What is optical flow?
     - Optical flow is tracking of every single pixel in the image that can be
@@ -831,16 +832,52 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
       methods when the motion is small.
 
 7. Are you able to describe the working principle of KLT?
+    - We start of with a template and we want to find the corresponding
+      template in the original image. We use the original warp parameters to
+      generate the warped image. We compute the difference which gives us the
+      error. We then compute the gradients with respect to $x$ and $y$ and we
+      apply the warping to the gradients. We also calculate the jacobian of the
+      warp which is 2n x 6n. We then combine these into a pointwise product
+      with the jacobian. The warped gradient image of the x is multiplied to
+      the top slot of the jacobian and the y gradient to the bottom. We do this
+      for every column. What we get out is a n x 6n term. This is then
+      contracted with the error by successively multiplying the error terms
+      with every image from the jacobian multiplication. This yields us 6
+      numbers. Additionally we use the jacobian multiplication term in the
+      computation of the hessian. This allows us to compute the update
+      $\Delta p$ which are added to the original warp parameters. We then
+      repeat these iterations till we obtain a satisfiably small $\Delta
+      p$.
 
 8. What functional  does  KLT  minimize?(proof  won’t  be  asked,  only  the
    first  two  slides  titled “derivation of the Lucas-Kanade algorithm”)
+    - KLT is minimising the sum of square distances between the template and
+      image to estimate the warping parameters.
+    - KLT summarises the SSD iteratively.
+    - We use an initial estimate of $p$ and want to increment the $\Delta p$
+      that minimises the SSD.
+    - We differentiate with respect to $/\Deltap$ and set the equation equal to
+      zero. Also then setting the derivative to zero.
 
 9. What is the Hessian matrix and for which warping function does it coincide
    to that used for point tracking?
+   - It is the second moment matrix that is computed by summing the outer
+     product of the gradient of y and the jacobian of w.
 
 10. Can you list Lukas-Kanade failure cases and how to overcome them?
+    - If the displacement is too large between template and image KLT fails.
+    - The assumptions do not hold. So illumination changes. Maybe the
+      mathematical model doesn't work for example we might not have a rigid
+      body.
+    - Another possibility is occlusions.
+    - The pyramidal approach can help us not have a very inaccurate initial $p$
+      estimation. The p value is then passed down the levels of the pyramid and
+      refined.
 
 11. How do we get the initial guess?
+    - Typically we will be given an image with the template defined. We will
+      initialise the parameter p to be an identity matrix and an additional
+      translation matrix that translates the top left corners.
 
 12. Illustrate alternative tracking using point features.
 
