@@ -14,8 +14,8 @@ cameras. In a nutshell odometry means motion estimation, visual odometry refers
 to estimating motion of a camera i.e. rotation (3 DoF) and translation, from
 the start by analysing the changes the motion induces on the camera images.
 
-VO algorithms takes in a sequence of temporally sorted images and returns as output
-a sequence of orientation and position (Array of 6 DoF poses)
+VO algorithms takes in a sequence of temporally sorted images and returns as
+output a sequence of orientation and position (Array of 6 DoF poses)
 
 ### VO Assumptions
 
@@ -54,13 +54,15 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
 <!-- ![VO Flow Chart](./img//voflow.png){ width=80%
 } -->
 
-- Feature detection and matching are the input to the motion estimation algorithm.
+- Feature detection and matching are the input to the motion estimation
+  algorithm.
 - The Motion Estimation stage takes as input the feature tracks and estimates
   incrementally one pose after another the relative translation and rotation
   between the last two frames.
 - Local optimisation takes the unoptimised last poses and adjusts them by
-  minimising some error to get more accurate poses and points. This is called bundle
-  adjustment or post graph optimisation depending on the algorithm being used.
+  minimising some error to get more accurate poses and points. This is called
+  bundle adjustment or post graph optimisation depending on the algorithm being
+  used.
 
 ## Lecture 2 + 3 : Image Formation
 
@@ -104,10 +106,10 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
       ceases to exist and becomes an ideal pin hole. We use only one ray and
       pass it through the Optical Center and take the point it intersects with
       the focal plane. This approximation is valid as long as the object is not
-      extremely close to the camera lens. the $X$ and $x$ refer
-      to the bases of the triangles or more explicitly the height of the point on
-      the object and the height displacement of the ray intersecting the image plane
-      from the optical center.
+      extremely close to the camera lens. the $X$ and $x$ refer to the bases of
+      the triangles or more explicitly the height of the point on the object
+      and the height displacement of the ray intersecting the image plane from
+      the optical center.
     - Do not forget this derived equation:  
     <center>
 
@@ -168,10 +170,9 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
       image point in meters, multiply by a rescaling factor and then translate
       with respect to the shifted origin. when we re-substitute these back into
       our original derived equations for $x$ and $y$ whe get. $\large u_0 +
-      \frac{k_ufX_c}{Z_c}$ and $\large v_0 + \frac{k_vfY_c}{Z_c}$ which can be further
-      rewritten by combining $k_uf$ to $\alpha_u$ (same for $v$).  
-      **Yielding:**
-      $\large u_0 + \frac{\alpha_uX_c}{Z_c}$ and $\large v_0 +
+      \frac{k_ufX_c}{Z_c}$ and $\large v_0 + \frac{k_vfY_c}{Z_c}$ which can be
+      further rewritten by combining $k_uf$ to $\alpha_u$ (same for $v$).
+      **Yielding:** $\large u_0 + \frac{\alpha_uX_c}{Z_c}$ and $\large v_0 +
       \frac{\alpha_vY_c}{Z_c}$  
     - All lenses have some distortion, usually the greater the FOV the greater
       the distortion. A positive distortion produces a barrel distortion and a
@@ -433,7 +434,8 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
       Different to intensity and census descriptors this HOG descriptor
       contains float values. HOG is a 1D vector.
 
-11. How is the keypoint detection done in SIFT and how does this differ from Harris?
+11. How is the keypoint detection done in SIFT and how does this differ from
+    Harris?
     - Harris uses the SSD metric which is thresholded where as SIFT uses a DoG
       approach and looks for local extrema in both scale and space. It compares
       each pixel to 26 neighbouring pixels one scale level above and below
@@ -479,7 +481,8 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
 
 16. How does the FAST detector work? What are its pros and cons compared with
     Harris?
-    - Features from Accelerated Segment Test, It is suboptimal compared to Harris.
+    - Features from Accelerated Segment Test, It is suboptimal compared to
+      Harris.
     - ![FAST detector](./img/fast.png)
     - It checks a ring of 16 pixels and checks N contiguous pixels and checks
       if they are all brighter or darker certain threshold compared to the
@@ -489,7 +492,8 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
 
 ## Lecture 7 : Stereo Vision
 
-1. Can you relate Structure from Motion to 3D reconstruction? What’s their difference?
+1. Can you relate Structure from Motion to 3D reconstruction? What’s their
+   difference?
     - In 3d reconstruction it is assumed that K,T, R are all know. The goal is
       to recover 3D  structure from images. in SFM we have no camera
       assumptions we are interested in recovering both the scene structure and
@@ -547,7 +551,8 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
 
 13. How can we establish stereo correspondences with sub pixel accuracy?
 
-14. Describe one or more simple ways to reject outliers in stereo correspondences.
+14. Describe one or more simple ways to reject outliers in stereo
+    correspondences.
 
 15. Is stereo vision the only way of estimating depth information? If not, are
     you able to list alternative options?(make link to other lectures of
@@ -555,7 +560,8 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
 
 ## Lecture 8 + 9 : Multiple View Geometry
 
-1. What's the minimum number of correspondences required for calibrated SFM and why?
+1. What's the minimum number of correspondences required for calibrated SFM and
+   why?
     - In SFM it is not possible to recover the absolute scale, it is however
       possible in stereo vision as the RT parameters are known ahead of time.
     - 5 image correspondences (Kruppa 1913)
@@ -604,7 +610,8 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
 7. Are you able to describe the relation between the essential and the
    fundamental matrix?
 
-8. Why is it important to normalize the point coordinates in the 8-point algorithm?
+8. Why is it important to normalize the point coordinates in the 8-point
+   algorithm?
     - The range of values in the essential matrix are massive.
 
 9. Describe one or more possible ways to achieve this normalization.
@@ -618,6 +625,7 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
 11. Are you able to provide quality metrics for the essential matrix estimation?
 
 12. Why do we need RANSAC?
+    - To remove outliers.
 
 13. What is the theoretical maximum number of combinations to explore?
 
@@ -673,25 +681,85 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
 
 17. How  can  we  reduce  the  number  of  RANSAC  iterations  for  the  SFM
     problem? (1-and  2-point RANSAC)
-        - We can apply some motion constraints. For example if we have a floor
-          bound robot we have a planar motion and do not thus require 6 DoF, 3
-          is sufficient. This allows us to built different $[R|T]$ matrices.
-        - In the case of a train moving on a rail (line motion) we don't need
-          any points as we already have the geometry.
-        - Circular planar motion requires one point.
+    - We can apply some motion constraints. For example if we have a floor
+      bound robot we have a planar motion and do not thus require 6 DoF, 3
+      is sufficient. This allows us to built different $[R|T]$ matrices.
+    - In the case of a train moving on a rail (line motion) we don't need
+      any points as we already have the geometry.
+    - Circular planar motion requires one point.
 
 18. Bundle Adjustment and Pose Graph Optimization. Mathematical expressions and
     illustrations. Pros and cons.
+    - 2 View bundle adjustment optimises $P^i, R, T$ by minimising the sum of
+      squared reprojection errors.
+    - Key difference between this and standard reprojection error minimisation
+      as in camera pose estimation in SFM. The key difference is in SFM we were
+      only optimising over the relative rotation and translation whereas here
+      we are interested in optimising also over the 3D point positions.
+    - It's called bundle adjustment because we are perturbing bundles of rays
+      of the projections into the cameras so that they intersect.
+    - Pose Graph optimisation: VO is sometimes described as a directed graph
+      with translations as the edges. This however doesn't paint the full
+      picture as there are features that may be observed in multiple states.
+      Pose Graph optimisation seeks to take into account not just adjacent
+      state transformations but also transformations from 2 or 3 or 4 frames
+      ago.
+    - BA the error is usually the reprojection error where as in PGO the error
+      is the pose error. BA is more accurate but has many many more parameters
+      to optimise.
+    - In motion only bundle adjustment we do not adjust the back projected
+      rays, the 3d points are fixed. We only adjust the camera pose.
 
-19. Are you able to describe hierarchical and sequential SFM for monocular
-    VO?
-20. What are keyframes? Why do we need them and how can we select them?
+19. Are you able to describe hierarchical and sequential SFM for monocular VO?
+    - We extract and match features between two nearby frames.  We the build
+      clusters consisting of 2 nearby frames.  We then extract the topological
+      tree. We then start at the leaves and merge the nodes by running 3 point
+      RANSAC.
+    - In monocular we are using 2D points on the plane, for this case we can
+      convert to 3D by using PNP or DLT algorithms. This is because we are
+      localising the camera with respect to the point cloud.
+
+20. What are key frames? Why do we need them and how can we select them?
+    - The first key frame is typically the camera. The second key frame is
+      selected based on an algorithm. For example if we want to do SFM and we
+      have a very small movement (small baseline motion) we will introduce a
+      lot of errors if we don't pick a keyframe with enough parallax to
+      accurately triangulate correspondences.
+    - Key frame selection is not required for stereo vision.
+
 21. Are you able to define loop closure detection? Why do we need loops?
+    - It allows for global optimisations as the first and last points can be
+      added to the post graph optimisation. This will give us an optimisation
+      for the entire trajectory. We do need to recognise all possible loop
+      closures. Typically done in separate thread and not performed in real
+      time.
+
 22. Are you able to provide a list of the most popular open source VO and VSLAM
     algorithms?
+    - PTAM, ORB-SLAM, SVO, LSD-SLAM & DSO.
+
 23. Are you able to describe the differences between feature-based methods and
     direct methods?
-24. Sparse vs semi-dense vs dense.What are their pros and cons?
+    - Indirect methods estimate the motion between the current and previous
+      frames by minimising the reprojection error. Direct methods on the other
+      hand do not perform feature extraction and RANSAC. Instead they focus on
+      minimising the Photometric error. Direct methods assume the current and
+      previous frames are not too far apart. This means that two images are
+      overlapping by at most one or two pixels. This allows us to apply
+      differential methods. It is called Photometric methods because we are
+      dealing directly with pixel intensity values.
+    - Indirect, Can cope with large frame to frame motions but are expensive.
+    - Direct, Much faster, more information but very sensitive to initial value.
+
+24. Sparse vs semi-dense vs dense. What are their pros and cons?
+    - The amount of pixels used is not used does not really matter as long as a
+      reasonably good overlap (basin of convergence) is kept. Outside of this
+      basin sparse drops quickly but dense and semi dense behave similarly
+      because weak gradients do not provide much info. The only advantage of
+      dense methods is when having defocus, motion blur or weak textures. The
+      main point is that sparse methods operate basically as good as dense and
+      semi dense as long as a good overlap is kept.
+
 25. General definition of VO and comparison with respect VSLAM and SFM.
     Definition of loop closure detection  (why  do  we  need  loops?). How  can
     we  detect  loop  closures?  (make  link  to  other lectures).
@@ -700,7 +768,49 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
 
 ## Lecture 11 : Tracking
 
+1. Are you able to illustrate tracking with block matching?
+
+2. Are  you  able  to  explain  the  underlying  assumptions  behind
+   differential  methods,  derive  their mathematical expression and the
+   meaning of the M matrix?
+
+3. When is this matrix invertible and when not?
+
+4. What is the aperture problem and how can we overcome it?
+
+5. What is optical flow?
+
+6. Can you list pros and cons of block-based vs. differential methods for
+   tracking?
+
+7. Are you able to describe the working principle of KLT?
+
+8. What functional  does  KLT  minimize?(proof  won’t  be  asked,  only  the
+   first  two  slides  titled “derivation of the Lucas-Kanade algorithm”)
+
+9. What is the Hessian matrix and for which warping function does it coincide
+   to that used for point tracking?
+
+10. Can you list Lukas-Kanade failure cases and how to overcome them?
+
+11. How do we get the initial guess?
+
+12. Illustrate alternative tracking using point features.
+
 ## Lecture 12a :  Dense 3D Reconstruction
+
+1. Are you able to describe the multi-view stereo working principle?
+   (aggregated photometric error)
+2. What  are  the  differences  in  the  behaviour  of  the  aggregated
+   photometric  error  for  corners,  flat regions, and edges?
+3. What is the disparity space image (DSI) and how is it built in practice?
+4. How do we extract the depth from the DSI?
+5. How do we enforce smoothness (regularization) and how do we incorporate
+   depth discontinuities (mathematical expressions)?
+6. What happens if we increase lambda (the regularization term)? What if lambda
+   is 0? And if lambda is too big?
+7. What is the optimal baseline for multi-view stereo?
+8. What are the advantages of GPUs?
 
 ## Lecture 12b : Place Recognition
 
