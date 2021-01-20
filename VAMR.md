@@ -763,25 +763,72 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
 25. General definition of VO and comparison with respect VSLAM and SFM.
     Definition of loop closure detection  (why  do  we  need  loops?). How  can
     we  detect  loop  closures?  (make  link  to  other lectures).
+    - Loop closures can be achieved by revisiting features seen before.
+    - Evaluation of VO and SLAM can be done by comparing to "ground truth"
+      obtained from IMU or GPS or similar tracking setups. A Naive approach is
+      to compare the first event of the estimation and the ground truth are
+      compared and to provide an initial state. The estimate is rescaled
+      according to the difference. This has a number of draw backs as
+      repeatability of the estimation may be subject to change if non
+      deterministic algorithms like RANSAC are used. Multi threaded
+      implementations can also produce different estimations from the same
+      dataset. A more modern approach is the Absolute Trajectory Error which
+      compares all ground truth positions to estimated positions. The
+      estimation is then aligned according to the position error. Once this is
+      computed, the Root Mean Square Error can be used to provide a global
+      optimisation. An even better approach is to do Relative Trajectory Error,
+      where the idea is not to output a single metric but to output a box plot.
+      The realignment is done in segments of poses rather than globally.
 
 ## Lecture 10 : NOT RELEVANT FOR EXAM
+
+- 🥳
 
 ## Lecture 11 : Tracking
 
 1. Are you able to illustrate tracking with block matching?
+    - Block based methods define a search region (similar to a Kernel), this is
+      usually 25 x 25 pixels. Next the patch to track (smaller patch) is
+      selected in the first image. Then we run an SSD over the search region in
+      the second image and look for the patch that minimises the SSD.
 
 2. Are  you  able  to  explain  the  underlying  assumptions  behind
    differential  methods,  derive  their mathematical expression and the
    meaning of the M matrix?
+    - Differential methods do not shift the patch. It only looks for the shift
+      in appearance of the same patch.between the images.
+    - There are three assumptions though:
+        - Brightness constancy
+        - Very low displacement, 1-2 pixels
+        - Spatial coherency, all the pixels in the patch undergo the same motion
+    - Usually to meet these assumptions the patch is made very small.
+    - We do a similar trick as in the Harris detector and express the first term
+      of the SSD as a first order approximation. This allows us to rewrite the
+      equation as a quadratic equation,yielding us a paraboloid, Then we
+      minimise this by looking for the cone of the paraboloid. Finally we get
+      a system of linear equations. This can be solved by premultiplying he
+      equation by the inverse of the first matrix. This yields us $[u,v]$. This
+      matrix at the end should be familiar because it is the same as the second
+      moment matrix from Harris.
 
 3. When is this matrix invertible and when not?
+    - It's determinant must be larger than zero. This can be done by
+      diagonalising and decomposing the matrix into a product of a rotation
+      matrix, the eigen values and another rotation matrix.
 
 4. What is the aperture problem and how can we overcome it?
 
 5. What is optical flow?
+    - Optical flow is tracking of every single pixel in the image that can be
+      tracked. There are two ways to visualise this. As errors or alternatively
+      as a colour coded map.
 
 6. Can you list pros and cons of block-based vs. differential methods for
    tracking?
+    - Block based methods work well if the motion is large though this could be
+      computationally demanding.
+    - This method can me implemented much more efficiently using differential
+      methods when the motion is small.
 
 7. Are you able to describe the working principle of KLT?
 
