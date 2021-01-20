@@ -881,22 +881,95 @@ Estimation](./img//vovsvslamvssfm.png){width=80%} -->
 
 12. Illustrate alternative tracking using point features.
 
-## Lecture 12a :  Dense 3D Reconstruction
+## Lecture 12a : Dense 3D Reconstruction
 
 1. Are you able to describe the multi-view stereo working principle?
    (aggregated photometric error)
+
 2. What  are  the  differences  in  the  behaviour  of  the  aggregated
    photometric  error  for  corners,  flat regions, and edges?
+
 3. What is the disparity space image (DSI) and how is it built in practice?
+
 4. How do we extract the depth from the DSI?
+
 5. How do we enforce smoothness (regularization) and how do we incorporate
    depth discontinuities (mathematical expressions)?
+
 6. What happens if we increase lambda (the regularization term)? What if lambda
    is 0? And if lambda is too big?
+
 7. What is the optimal baseline for multi-view stereo?
+
 8. What are the advantages of GPUs?
 
 ## Lecture 12b : Place Recognition
+
+1. What is an inverted file index?
+    - It is inspired by text retrieval. In text retrieval a voting scheme is
+      used to build a score to retrieve a text string. The cells are like the
+      pages in the book and each cell is incremented as a query word appears in
+      a page. The highest voted page is selected.
+
+2. What is a visual word?
+    - A visual world is a cluster of similar SIFT descriptors. The images of
+      the database are all processed and about 1000 features are extracted from
+      each image. Then we take all these descriptors and map them into a 128
+      dimension descriptor space. We then map these dots and observe that some
+      features are clustered and close by. So what we can do is group features
+      in sets of similar descriptors by doing partitioning. This is achieved
+      using K-Means clustering. Each of these clusters are sets of similar sift
+      descriptors. A visual word is the arithmetic average of all the SIFT
+      descriptors within the same cluster.
+
+3. How does K-means clustering work?
+    - K-means clustering allows us to partition a space into a cluster such
+      that all the dots within a cluster minimise the sum of squared distances
+      from the centroid of the cluster. This algorithm does have a random
+      component so the results can vary slightly. It is an iterative
+      algorithm. It starts with a seed of three features which are randomly
+      chosen, the first step associates to each random seed all the closest
+      features. Then we compute the centroid of these elementary clusters. The
+      next step is to rerun the associations, reassociate the computed centroid
+      to what ever features are around it and recompute the centroid. After
+      some point the centroid will not move beyond a certain threshold. Once
+      this is satisfied we can say that this cluster is a visual word.
+
+4. Why do we need hierarchical clustering?
+    - Because comparing every feature to every word in the vocabulary is still
+      impractical runtime wise.
+
+5. Explain and illustrate image retrieval using Bag of Words.
+    - Once the feature space is clustered, we identify a unique usually
+      numerical identifier to each visual word. This is called a vocabulary and
+      it contains a pointer to a list of images where that visual word
+      appeared.
+    - We build a voting array with as many cells as images in the db, we
+      initialise all these cells to zero. Next we look up each sift feature in
+      the query image in the vocabulary. We compute the euclidean distance
+      between each feature of the query image to each feature in the vocabulary
+      and choose the one wih the lowest distance. Then we take the list of
+      images that closest match pointed to and use it to increment our voting
+      array. The problem is having to do 1,000,000 comparisons for each SIFT
+      feature of which we might have a 1000. This would take 3 hours. What you
+      do in fact is weight the voting by the inverse of the frequency of the
+      word. More repeated words vote less. But this doesn't get us hour 3
+      hours back. We need to use hierarchical clustering. The idea is to
+      partition the feature space hierarchically in a coarse to fine manner. We
+      create partitions of the feature space. Then incrementally partition each
+      subcluster creating more subclusters. We do this until we reach the
+      desired number of visual words. A million in our case. The we can link
+      all the visual words as a tree along the partition lines. Now when we
+      have a query image we don't compare it with the terminal vertices, we
+      compare with the parents and their children and eventually the terminal
+      nodes.
+
+6. Discussion  on  place  recognition:  what  are  the  open  challenges  and
+what  solutions  have  been proposed?
+    - Illumination changes, seasonal changes, appearance changes.
+    - Probabilistic approaches have been suggested for instance by a group from
+      Oxford. More recent approaches use semantics using deep learning. They
+      focus on high level features and not primitive features like points.
 
 ## Lecture 12c : NOT RELEVANT FOR EXAM
 
