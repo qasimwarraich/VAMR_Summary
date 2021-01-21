@@ -1084,24 +1084,71 @@ what  solutions  have  been proposed?
 ## Lecture 14 : Event Based Vision
 
 1. What is a DVS and how does it work?
+    - It is a sensor that outputs pixel wise changes in illumination. It does
+      not have a frame rater or global shutter. It pixel level events
+      asynchronously.
 
 2. What are its pros and cons vs. standard cameras?
+    - Much higher temporal resolution
+    - Much higher dynamic range
+    - Much better resistance to motion blur
+    - Cannot output much in texture-less scenes or when static.
+    - Standard algorithms are hard to apply to events.
 
 3. Can we apply standard camera calibration techniques?
+    - The standard pinhole model is still valid.
+    - Standard passive calibration models cannot be used. We don't necessarily
+      get a full image with an event camera.
+    - We have to be constantly moving the reference pattern in order to
+      generate events. One good solution is to use blinking patterns or an led
+      pattern to calibrate cameras.
 
 4. How can we compute optical flow with a DVS?
+    - A very simple approach for pure horizontal motion could be to represent
+      the events in space time. It will appear as a ramp. The optical flow can
+      be computed as the change in x over the change in time.
 
 5. Could you intuitively explain why we can reconstruct the intensity?
+    - Through gradient map estimation intensity estimations can be obtained
+      using Poisson reconstruction. We use the equation $\pm C = - \nabla L
+      \cdot u$ where $u$ represents the rotation. Knowing the $-\nabla L$ from
+      the gradient estimation and estimating the rotation will help us to solve
+      for the $C$ value which would allow us to rebuild the pixel intensities.
 
 6. What is the generative model of a DVS (formula)?Can you derive its 1st order
    approximation?
+    - The generative model for events is based on the change in light intensity
+      are a particular pixel above a certain threshold.
+    - We derive a first order approximation to try and explain this idea of
+      event generation not existing when moving parallel to and edge but rather
+      perpendicular motions produce events.
+    - Using the brightness constancy assumption the intensity value of a $p$
+      should be the same before and after motion.
+    - The final derived formula shows that maximum generation of the events
+      occurs when the motion is perpendicular to the edge.
 
 7. What is a DAVIS sensor?
+    - A DAVIS sensor fuses standard cameras, event cameras and an IMU.
 
 8. What  is  the  focus  maximization  framework  and  how  does  it  work?
    What  is  its  advantage compared with the generative model?
+    - The advantage to the generative model is that we don't have to keep
+      recalculating an ever changing and pixel dependent C value.
+    - The algorithm warps events according to the direction of motion that
+      generated those events. The events are initially warped according to some
+      warping functions, this is only affecting the x,y coordinates not the
+      time. After each warping we aggregate all the events on the x,y plane to
+      generate a greyscale image. We do this at ever iteration and apply a
+      different warping at every iteration. What we want to maximise is the
+      contrast or focus of this image. The contrast or focus can be obtained
+      from the variance of the image.
 
 9. How can we get color events
+    - The DAVIS 346 is an example of a coloured event camera that outputs RGB
+      events, this is done by adding a bayer pattern on top of the pixels so
+      some pixels will output red, green or blue. Basically to reconstruct by
+      doing a separate greyscale reconstruction for each separate colour
+      channel and combine them with the help of some interpolation.
 
 ## Application Questions
 
