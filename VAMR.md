@@ -1008,7 +1008,100 @@ what  solutions  have  been proposed?
 
 ## Lecture 13 : Visual Inertial Fusion
 
+1. Why is it recommended to use an IMU for Visual Odometry?
+    - Monocular vision is scale ambiguous. We cannot estimate the magnitude of
+      the translation but only its directions. With an IMU you can get the
+      position displacement and use it to scale the SFM.
+    - Pure vision is not robust enough, things like HDR, blue and low texture
+      cause issues for cameras.
+
+2. Why not just an IMU, without a camera?
+    - Pure IMU will lead to a large drift. We need a double integration of the
+      acceleration to get position. Because of this double integration any bias
+      we get will be quadratic.
+
+3. How does a MEMS IMU work?
+    - A silicone spring connects a seismic mass vibrating in a capacityive
+      divider. A capacitive divider converts the displacement of the seismic
+      mass into an electric signal. Damping is achieved by gas sealed in the
+      device.
+
+4. What is the drift of an industrial IMU?
+    - 10x less than consumer IMUs. 3.9k kilometres in an hour.
+
+5. What is the IMU measurement model?
+    - It measures along three axis for angular velocity using a gyroscope.
+    - It also measures linear acceleration along the three axis' using an
+      accelerometer
+
+6. What causes the bias in an IMU?
+    - Any acceleration bias which is considered constant would be quadratically
+      increased overtime as a result of the double integration required to
+      compute position.
+
+7. How do we model the bias?
+    - You can model it as drift in meters over time using the error propagation
+      formula.
+    - We model the noise by saying the first derivative of the bias is a
+      zero-mean Gaussian noise with standard deviation $\sigma_b$.
+    - Bias changes between every use of the device. Things like temperature and
+      pressure can change the bias, the bias should be re-estimated before
+      every use unless the VO pipeline has some live bias estimation.
+
+8. How do we integrate the acceleration to get the position (formula)?
+    - We use a double integration to get the position.
+
+9. What is the definition of loosely coupled and tightly coupled visual
+    inertial fusions?
+    - Loosely Coupled:
+        - Treats VO and IMU as two separate not coupled black boxes.
+        - It takes images as input, extract features and feed them to a
+          standard VO algorithms like SVO or ORBSLAM and then the output is the
+          position and orientation of the camera in space.
+        - The loosely coupled approach ignores the landmarks (features)
+        - All it does is fuse the camera position and the IMU position for
+          example with a Kalman filter, it uses weighted averages.
+        - The main problem is that we are not using the IMU to change the VO.
+          This could aid in identification of features.
+
+    - Tightly Coupled:
+        - The fusion box takes as input raw 3d features for example from KLT
+          and also as input the raw IMU measurement. Then it tries to estimate
+          the correct the position, orientation and velocity by collecting all
+          the information in an optimal way.
+
+10. How can we use non-linear optimization-based approaches to solve for visual
+    inertial fusion?
+    - Non linear methods fuse inertial and visual methods by solving a non
+      linear optimisation problem. Basically by minimising a cost function.
+      Non linear optimisations represents the VIO problem as a graph problem
+      where we want to find the graph configuration with minimum energy.
+      Minimising the position and reprojection errors.
+
+11. Can you write down the cost function of smoothing
+    methods and illustrate its meaning?
+
 ## Lecture 14 : Event Based Vision
+
+1. What is a DVS and how does it work?
+
+2. What are its pros and cons vs. standard cameras?
+
+3. Can we apply standard camera calibration techniques?
+
+4. How can we compute optical flow with a DVS?
+
+5. Could you intuitively explain why we can reconstruct the intensity?
+
+6. What is the generative model of a DVS (formula)?Can you derive its 1st order
+   approximation?
+
+7. What is a DAVIS sensor?
+
+8. What  is  the  focus  maximization  framework  and  how  does  it  work?
+   What  is  its  advantage compared with the generative model?
+
+9. How can we get color events
 
 ## Application Questions
 
